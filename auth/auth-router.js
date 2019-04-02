@@ -25,6 +25,7 @@ router.post('/login', (req, res) => {
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
+        req.session.user = user; // We are saving this on session. Session is like a storage that the server is gonna keep in memory by default. 
         res.status(200).json({
           message: `Welcome ${user.username}!`,
         });
