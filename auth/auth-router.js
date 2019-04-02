@@ -11,6 +11,7 @@ router.post('/register', (req, res) => {
 
   Users.add(user)
     .then(saved => {
+      req.session.user = user;
       res.status(201).json(saved);
     })
     .catch(error => {
@@ -38,6 +39,19 @@ router.post('/login', (req, res) => {
     });
 });
 
+router.get("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        res.status(500).json({ message: "you can never leave!" });
+      } else {
+        res.status(200).json({ message: "bye, thanks for visiting"});
+      }
+    });
+  } else {
+    res.json({ message: "Logged out already" });
+  }
+});
 
 
 module.exports = router;
